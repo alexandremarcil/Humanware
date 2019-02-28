@@ -1,7 +1,8 @@
 from models.baselines import BaselineCNN, ConvNet, BaselineCNN_dropout
-from models.vgg import VGG
-from models.resnet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 from models.customhead import CustomHead
+from models.resnet import ResNet18, ResNet50, ResNet101, ResNet152
+from models.vgg import VGG
+
 
 def initialize_model(model_name):
     '''
