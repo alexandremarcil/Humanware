@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export ROOT_DIR=$HOME'/digit-detection'
+export ROOT_DIR=$HOME'/Humanware'
 export SVHN_DIR='/rap/jvb-000-aa/COURS2019/etudiants/data/humanware/SVHN'
 export DATA_DIR=$SVHN_DIR/train
 export TMP_DATA_DIR=$DATA_DIR
