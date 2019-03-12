@@ -68,14 +68,10 @@ def parse_args():
                         path to a directory where the output of
                         your training will be saved.''')
     
-    parser.add_argument("--hypersearch", type=boolean,
-                    default='results/',
-                    help='''results_dir will be the absolute
-                    path to a directory where the output of
-                    your training will be saved.''')
-    
-    parser.add_argument('--hypersearch', dest='feature', default=False, action='store_true',
-                    help='''Put to yes if you want to do the hyperarameter search''')
+    parser.add_argument('--hypersearch', dest='feature',
+                        default=False, action='store_true',
+                        help='''Put to yes if you want to do the
+                        hyperarameter search''')
 
     args = parser.parse_args()
     return args
@@ -152,12 +148,14 @@ if __name__ == '__main__':
         sample_size=cfg.TRAIN.SAMPLE_SIZE,
         valid_split=cfg.TRAIN.VALID_SPLIT)
     
+    #Set the device
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print("Device used: ", device)
     
     #Hyperparameter Search
     if args.hypersearch:
         
+        #Defined the prameters and search space
         dim_learning_rate = Real(low=1e-6, high=1e-2, prior='log-uniform',name='learning_rate')
         dim_num_dense_layers = Integer(low=0, high=2, name='num_dense_layers')
         dim_dropout = Real(low=0, high=0.9, name='dropout')
@@ -165,29 +163,53 @@ if __name__ == '__main__':
         dimensions = [dim_learning_rate, dim_num_dense_layers, dim_dropout, dim_wd]
         default_parameters = [0.001, 2, 0.2, 0.0005]
         
+        #Path to save the best model find during the hyperparameter search
         path_best_model = "best_ofall_model.pth"
+        
+        #Initialize the best accuracy
         best_accuracy = 0.0
         
-        def log_dir_name(dim_learning_rate, dim_num_dense_layers, dim_dropout, dim_wd):
+        def log_dir_name(learning_rate, num_dense_layers, dropout, weigth_decay):
+            '''
+            Set the dir-name for the TensorBoard
 
-        # The dir-name for the TensorBoard log-dir.
-        # Insert all the hyper-parameters in the dir-name.
-        log_dir = f"Run_lr{round(dim_learning_rate,6)}\
-        _Denselayers{dim_num_dense_layers}\
-        _Dropout{round(dim_dropout,2)}\
-        _Weightdecay{round(dim_wd,6)}"
+            Parameters
+            ----------
+            learning_rate: float
+                The learning rate
+            num_dense_layers: int
+                Number of fully connected layer
+            dropout: float
+                Amount of Dropout
+            weigth_decay: float
+                Amount of weight decay
+            '''
 
-        return log_dir
+            # Insert all the hyper-parameters in the dir-name.
+            log_dir = f"Run_lr{round(learning_rate, 6)}\
+            _Denselayers{num_dense_layers}\
+            _Dropout{round(dropout, 2)}\
+            _Weightdecay{round(weigth_decay, 6)}"
+
+            return log_dir
         
         @use_named_args(dimensions=dimensions)
         def fitness(learning_rate, num_dense_layers, dropout, Weigth_Decay):
-            """
-            Hyper-parameters:
-            learning_rate:     Learning-rate for the optimizer.
-            num_dense_layers:  Number of dense layers.
-            num_dense_nodes:   Number of nodes in each dense layer.
-            activation:        Activation function for all layers.
-            """
+            '''
+            Create and run model with a specified hyperparameter setting.
+            Used for the hyperparameter optimization
+
+            Parameters
+            ----------
+            learning_rate: float
+                The learning rate
+            num_dense_layers: int
+                Number of fully connected layer
+            dropout: float
+                Amount of Dropout
+            weigth_decay: float
+                Amount of weight decay
+            '''
 
             # Print the hyper-parameters.
             print("............................")
@@ -202,15 +224,15 @@ if __name__ == '__main__':
 
             # Dir-name for the TensorBoard log-files.
             log_dir = log_dir_name(learning_rate, num_dense_layers, dropout, Weigth_Decay)
-
             output_dir = cfg.OUTPUT_DIR + "/" + log_dir 
+            
+            # Create the directory
             mkdir_p(output_dir)
 
-
-
+            #Create the summaryWriter for Tensorboard
             writer = SummaryWriter(output_dir.replace("checkpoint","logs"))
 
-            # Use Keras to train the model.
+            # Train the model.
             best_model, accuracy = train_model(model,
                                                train_loader = train_loader,
                                                valid_loader = valid_loader,
@@ -220,25 +242,26 @@ if __name__ == '__main__':
                                                lr = learning_rate, 
                                                weight_decay = Weigth_Decay,
                                                output_dir = output_dir)
+            
             # Save the model if it improves on the best-found performance.
             # We use the global keyword so we update the variable outside
             # of this function.
-
 
             global best_accuracy
 
             # If the classification accuracy of the saved model is improved ...
 
             if accuracy > best_accuracy:
+                
                 print("Updating best Model")
                 # Save the new model to harddisk.
                 torch.save(best_model, path_best_model)
 
-                # Update the classification accuracy.
+                # Update the best classification accuracy.
                 best_accuracy = accuracy
 
 
-            # Delete the Keras model with these hyper-parameters from memory.
+            # Delete the model with these hyper-parameters from memory.
             del model
 
             # NOTE: Scikit-optimize does minimization so it tries to
@@ -247,13 +270,14 @@ if __name__ == '__main__':
             # accuracy, we need to negate this number so it can be minimized.
             return -accuracy
         
+        #Run the hyperparameter search
         search_result = gp_minimize(func=fitness,
                             dimensions=dimensions,
                             acq_func='EI', # Expected Improvement.
                             n_calls=11,
                             x0=default_parameters)
-
-        space = search_result.space
+        
+        #Print the result of the hyperparameter search
         print("Best Accuracy:")
         print(-search_result.fun)
         print("Best Parameters:")
@@ -264,8 +288,10 @@ if __name__ == '__main__':
         # Define model architecture
         model = initialize_model(cfg.CONFIG_NAME)
         
+        #Create the summaryWriter for Tensorboard
         writer = SummaryWriter(output_dir.replace("checkpoint","logs"))
-
+        
+        #Train the model
         train_model(model,
                     train_loader=train_loader,
                     valid_loader=valid_loader,
