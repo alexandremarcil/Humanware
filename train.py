@@ -9,16 +9,25 @@ import numpy as np
 import pprint
 import random
 from shutil import copyfile
+from tensorboardX import SummaryWriter
+
+import skopt
+from skopt import gp_minimize, forest_minimize
+from skopt.space import Real, Categorical, Integer
+from skopt.plots import plot_convergence
+from skopt.plots import plot_objective, plot_evaluations
+from skopt.utils import use_named_args
 
 import torch
 
 from utils.config import cfg, cfg_from_file
 from utils.dataloader import prepare_dataloaders
 from utils.misc import mkdir_p
-# from models.baselines import BaselineCNN, ConvNet, BaselineCNN_dropout
-from models.vgg import VGG
-# from models.resnet import ResNet18
+from models.model_initialisation import initialize_model
+from models.baselines import ConvNet
 from trainer.trainer import train_model
+
+
 
 
 dir_path = (os.path.abspath(os.path.join(os.path.realpath(__file__), './.')))
@@ -54,10 +63,19 @@ def parse_args():
                                 training''')
 
     parser.add_argument("--results_dir", type=str,
-                        default='results/',
+                        default='results/checkpoint/',
                         help='''results_dir will be the absolute
                         path to a directory where the output of
                         your training will be saved.''')
+    
+    parser.add_argument("--hypersearch", type=boolean,
+                    default='results/',
+                    help='''results_dir will be the absolute
+                    path to a directory where the output of
+                    your training will be saved.''')
+    
+    parser.add_argument('--hypersearch', dest='feature', default=False, action='store_true',
+                    help='''Put to yes if you want to do the hyperarameter search''')
 
     args = parser.parse_args()
     return args
@@ -84,7 +102,7 @@ def load_config():
     cfg.METADATA_FILENAME = args.metadata_filename
     cfg.OUTPUT_DIR = os.path.join(
         args.results_dir,
-        '%s_%s_%s' % (cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp))
+        '%s_%s' % (cfg.DATASET_NAME, timestamp))
 
     mkdir_p(cfg.OUTPUT_DIR)
     copyfile(args.cfg, os.path.join(cfg.OUTPUT_DIR, 'config.yml'))
@@ -133,20 +151,136 @@ if __name__ == '__main__':
         batch_size=cfg.TRAIN.BATCH_SIZE,
         sample_size=cfg.TRAIN.SAMPLE_SIZE,
         valid_split=cfg.TRAIN.VALID_SPLIT)
-
-    # Define model architecture
-    # baseline_cnn = ConvNet(num_classes=7)
-    # baseline_cnn = BaselineCNN(num_classes=7)
-    # resnet18 = ResNet18(num_classes=7)
-    vgg19 = VGG('VGG19', num_classes=7)
-    # baseline_cnn = BaselineCNN_dropout(num_classes=7, p=0.5)
-
+    
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print("Device used: ", device)
+    
+    #Hyperparameter Search
+    if args.hypersearch:
+        
+        dim_learning_rate = Real(low=1e-6, high=1e-2, prior='log-uniform',name='learning_rate')
+        dim_num_dense_layers = Integer(low=0, high=2, name='num_dense_layers')
+        dim_dropout = Real(low=0, high=0.9, name='dropout')
+        dim_wd = Real(low=1e-6 , high=1e-2, prior='log-uniform', name='Weigth_Decay')
+        dimensions = [dim_learning_rate, dim_num_dense_layers, dim_dropout, dim_wd]
+        default_parameters = [0.001, 2, 0.2, 0.0005]
+        
+        path_best_model = "best_ofall_model.pth"
+        best_accuracy = 0.0
+        
+        def log_dir_name(dim_learning_rate, dim_num_dense_layers, dim_dropout, dim_wd):
 
-    train_model(vgg19,
-                train_loader=train_loader,
-                valid_loader=valid_loader,
-                num_epochs=cfg.TRAIN.NUM_EPOCHS,
-                device=device,
-                output_dir=cfg.OUTPUT_DIR)
+        # The dir-name for the TensorBoard log-dir.
+        # Insert all the hyper-parameters in the dir-name.
+        log_dir = f"Run_lr{round(dim_learning_rate,6)}\
+        _Denselayers{dim_num_dense_layers}\
+        _Dropout{round(dim_dropout,2)}\
+        _Weightdecay{round(dim_wd,6)}"
+
+        return log_dir
+        
+        @use_named_args(dimensions=dimensions)
+        def fitness(learning_rate, num_dense_layers, dropout, Weigth_Decay):
+            """
+            Hyper-parameters:
+            learning_rate:     Learning-rate for the optimizer.
+            num_dense_layers:  Number of dense layers.
+            num_dense_nodes:   Number of nodes in each dense layer.
+            activation:        Activation function for all layers.
+            """
+
+            # Print the hyper-parameters.
+            print("............................")
+            print('learning rate: {0:.1e}'.format(learning_rate))
+            print('num_dense_layers:', num_dense_layers)
+            print('Dropout:', dropout)
+            print('Weight Decay:', Weigth_Decay)
+            print()
+
+            # Create the neural network with these hyper-parameters.
+            model = ConvModel(num_dense_layers = num_dense_layers, dropout = dropout)
+
+            # Dir-name for the TensorBoard log-files.
+            log_dir = log_dir_name(learning_rate, num_dense_layers, dropout, Weigth_Decay)
+
+            output_dir = cfg.OUTPUT_DIR + "/" + log_dir 
+            mkdir_p(output_dir)
+
+
+
+            writer = SummaryWriter(output_dir.replace("checkpoint","logs"))
+
+            batch = next(iter(train_loader))
+            inputs = batch['image']
+            inputs = inputs.to(device)
+            model = model.to(device)
+
+            writer.add_graph(model, inputs)
+
+
+            # Use Keras to train the model.
+            best_model, accuracy = train_model(model,
+                                               train_loader = train_loader,
+                                               valid_loader = valid_loader,
+                                               device = device,
+                                               writer = writer,
+                                               num_epochs = cfg.TRAIN.NUM_EPOCHS,
+                                               lr = learning_rate, 
+                                               weight_decay = Weigth_Decay,
+                                               output_dir = output_dir)
+            # Save the model if it improves on the best-found performance.
+            # We use the global keyword so we update the variable outside
+            # of this function.
+
+
+            global best_accuracy
+
+            # If the classification accuracy of the saved model is improved ...
+
+            if accuracy > best_accuracy:
+                print("Updating best Model")
+                # Save the new model to harddisk.
+                torch.save(best_model, path_best_model)
+
+                # Update the classification accuracy.
+                best_accuracy = accuracy
+
+
+            # Delete the Keras model with these hyper-parameters from memory.
+            del model
+
+            # NOTE: Scikit-optimize does minimization so it tries to
+            # find a set of hyper-parameters with the LOWEST fitness-value.
+            # Because we are interested in the HIGHEST classification
+            # accuracy, we need to negate this number so it can be minimized.
+            return -accuracy
+        
+        search_result = gp_minimize(func=fitness,
+                            dimensions=dimensions,
+                            acq_func='EI', # Expected Improvement.
+                            n_calls=11,
+                            x0=default_parameters)
+
+        space = search_result.space
+        print("Best Accuracy:")
+        print(-search_result.fun)
+        print("Best Parameters:")
+        dim_names = ['learning_rate', 'num_dense_layers', 'dropout', 'Weigth_Decay']
+        print({paramname:best_param for paramname, best_param in zip(dim_names,search_result.x)})
+         
+    else:
+        # Define model architecture
+        model = initialize_model(cfg.CONFIG_NAME)
+        
+        writer = SummaryWriter(output_dir.replace("checkpoint","logs"))
+
+        train_model(model,
+                    train_loader=train_loader,
+                    valid_loader=valid_loader,
+                    device = device,
+                    writer = writer,
+                    num_epochs=cfg.TRAIN.NUM_EPOCHS,
+                    lr = cfg.TRAIN.NUM_EPOCHS, 
+                    output_dir=cfg.OUTPUT_DIR)
+        
+
