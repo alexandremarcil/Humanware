@@ -38,6 +38,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
 
     since = time.time()
     model = model.to(device)
+    best_model = copy.deepcopy(model)
     train_step =0
     valid_best_accuracy = 0
     starting_epoch = 1
