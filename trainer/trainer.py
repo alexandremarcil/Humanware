@@ -41,7 +41,7 @@ def train_model(model, train_loader, valid_loader, device,
     valid_accuracy_history = []
     valid_best_accuracy = 0
     optimizer = torch.optim.SGD(model.parameters(), lr=cfg.TRAIN.LR, momentum=cfg.TRAIN.MOM)
-    criterion = torch.nn.CrossEntropyLoss(ignore_index=-1)
+    loss_ndigits = torch.nn.CrossEntropyLoss()
 
     print("# Start training #")
     for epoch in range(num_epochs):
@@ -60,23 +60,16 @@ def train_model(model, train_loader, valid_loader, device,
 
             inputs = inputs.to(device)
             target_ndigits = targets[:, 0].long()
-            target_digits = targets[:, 1:].long()
 
             target_ndigits = target_ndigits.to(device)
-            target_digits = target_digits.to(device)
 
             # Zero the gradient buffer
             optimizer.zero_grad()
 
             # Forward
-            outputs_ndigits, outputs_digits = model(inputs)
-            
-            #Loss for the lenght of the sequence
-            loss = criterion(outputs_ndigits, target_ndigits)
-            
-            #Loss for the digits prediction
-            for idx, output_digit in enumerate(outputs_digits):
-                loss +=  criterion(output_digit,target_digits[:,idx])
+            outputs = model(inputs)
+
+            loss = loss_ndigits(outputs, target_ndigits)
 
             # Backward
             loss.backward()
@@ -90,11 +83,8 @@ def train_model(model, train_loader, valid_loader, device,
 
         valid_loss = 0
         valid_n_iter = 0
-        valid_correct_ndigits = 0
-        valid_correct_digits = [0 for _ in range(5)]
-        valid_ndigits_samples = 0
-        valid_digits_samples = [0 for _ in range(5)]
-        valid_digits_acc = {} 
+        valid_correct = 0
+        valid_n_samples = 0
 
         # Set model to evaluate mode
         model = model.eval()
@@ -108,55 +98,36 @@ def train_model(model, train_loader, valid_loader, device,
             inputs = inputs.to(device)
 
             target_ndigits = targets[:, 0].long()
-            target_digits = targets[:, 1:].long()
-            
-            
             target_ndigits = target_ndigits.to(device)
-            target_digits = target_digits.to(device)
 
             # Forward
-            outputs_ndigits, outputs_digits = model(inputs)
+            outputs = model(inputs)
 
-            
-            loss = criterion(outputs_ndigits, target_ndigits)
-            
-            #Loss for the digits prediction
-            for digits, output_digit in enumerate(outputs_digits):
-                loss +=  criterion(output_digit,target_digits[:,digits])
+            loss = loss_ndigits(outputs, target_ndigits)
 
             # Statistics
             valid_loss += loss.item()
             valid_n_iter += 1
-            _, predicted_ndigits = torch.max(outputs_ndigits.data, 1)
-            predicted_digits = [torch.max(output_digit.data, 1)[1] for output_digit in outputs_digits]
-            
-            valid_correct_ndigits += (predicted_ndigits == target_ndigits).sum().item()
-            valid_ndigits_samples += target_ndigits.size(0)
-            
-            for digits in range(5):
-                valid_correct_digits[digits] += (predicted_digits[digits] == target_digits[:,digits]).sum().item()
-                valid_digits_samples[digits] += (target_digits[:,digits] != -1).sum().item()
+            _, predicted = torch.max(outputs.data, 1)
+            valid_correct += (predicted == target_ndigits).sum().item()
+            valid_n_samples += target_ndigits.size(0)
 
         train_loss_history.append(train_loss / train_n_iter)
         valid_loss_history.append(valid_loss / valid_n_iter)
-        valid_ndigits_acc = valid_correct_ndigits / valid_ndigits_samples
-        
-        for digits in range(5):
-            valid_digits_acc[digits+1] = valid_correct_digits[digits]/valid_digits_samples[digits]
+        valid_accuracy = valid_correct / valid_n_samples
 
         print('\nEpoch: {}/{}'.format(epoch + 1, num_epochs))
         print('\tTrain Loss: {:.4f}'.format(train_loss / train_n_iter))
         print('\tValid Loss: {:.4f}'.format(valid_loss / valid_n_iter))
-        print('\tValid Sequence length Accuracy: {:.4f}'.format(valid_ndigits_acc))
-        print(f'\tValid Digits Accuracy: {valid_digits_acc}')
+        print('\tValid Accuracy: {:.4f}'.format(valid_accuracy))
 
-        if valid_ndigits_acc > valid_best_accuracy:
-            valid_best_accuracy = valid_ndigits_acc
+        if valid_accuracy > valid_best_accuracy:
+            valid_best_accuracy = valid_accuracy
             best_model = copy.deepcopy(model)
             print('Checkpointing new model...')
             model_filename = output_dir + '/checkpoint.pth'
             torch.save(model, model_filename)
-        valid_accuracy_history.append(valid_ndigits_acc)
+        valid_accuracy_history.append(valid_accuracy)
 
     time_elapsed = time.time() - since
 
