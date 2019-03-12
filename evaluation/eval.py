@@ -11,6 +11,7 @@ import random
 from sklearn.metrics import confusion_matrix
 
 import sys
+
 sys.path.append('..')
 
 from utils.dataloader import prepare_dataloaders
@@ -115,7 +116,6 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
 
 
 if __name__ == "__main__":
-
     ###### DO NOT MODIFY THIS SECTION ######
     parser = argparse.ArgumentParser()
 
@@ -137,7 +137,6 @@ if __name__ == "__main__":
     results_dir = args.results_dir
     #########################################
 
-
     ###### MODIFY THIS SECTION ######
     # Put your group name here
     group_name = "b1phut_baseline"
@@ -148,7 +147,6 @@ if __name__ == "__main__":
     # Helios.
 
     #################################
-
 
     ###### DO NOT MODIFY THIS SECTION ######
     print("\nEvaluating results ... ")

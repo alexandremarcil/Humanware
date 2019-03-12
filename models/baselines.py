@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
+from models.customhead import CustomHead
 
 
 class ConvModel(nn.Module):
@@ -42,7 +43,7 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
             nn.Dropout(dropout)
         )
-        
+
         hidden6 = nn.Sequential(
             nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
@@ -50,8 +51,7 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=1, padding=1),
             nn.Dropout(dropout)
         )
-        
-        
+
         hidden7 = nn.Sequential(
             nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
@@ -59,8 +59,7 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
             nn.Dropout(dropout)
         )
-        
-        
+
         hidden8 = nn.Sequential(
             nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
@@ -68,7 +67,7 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=1, padding=1),
             nn.Dropout(dropout)
         )
-        
+
         hidden9 = nn.Sequential(
             nn.Linear(192 * 7 * 7, 3072),
             nn.ReLU()
@@ -88,37 +87,27 @@ class ConvModel(nn.Module):
             hidden7,
             hidden8
         )
-        
-        if num_dense_layers == 0 :
+
+        if num_dense_layers == 0:
             self._classifier = nn.Sequential()
             input_features = 192 * 7 * 7
-            
-        elif num_dense_layers == 1 :
+
+        elif num_dense_layers == 1:
             self._classifier = nn.Sequential(hidden9)
             input_features = 3072
-            
-        elif num_dense_layers == 2 :
+
+        elif num_dense_layers == 2:
             self._classifier = nn.Sequential(hidden9, hidden10)
             input_features = 3072
-            
-        self._digit_length = nn.Sequential(nn.Linear(input_features, 7))
-        self._digit1 = nn.Sequential(nn.Linear(input_features, 10))
-        self._digit2 = nn.Sequential(nn.Linear(input_features, 10))
-        self._digit3 = nn.Sequential(nn.Linear(input_features, 10))
-        self._digit4 = nn.Sequential(nn.Linear(input_features, 10))
-        self._digit5 = nn.Sequential(nn.Linear(input_features, 10))
+
+        self.custom_output = CustomHead(input_features)
 
     def forward(self, x):
         x = self._features(x)
         x = x.view(x.size(0), 192 * 7 * 7)
         x = self._classifier(x)
-
-        length_logits, digits_logits = self._digit_length(x), [self._digit1(x),
-                                                               self._digit2(x),
-                                                               self._digit3(x),
-                                                               self._digit4(x),
-                                                               self._digit5(x)]
-        return length_logits, digits_logits
+        x = self.custom_output(x)
+        return x
 
 
 class BaselineCNN(nn.Module):  # Achieves ~91%
@@ -164,13 +153,13 @@ class BaselineCNN(nn.Module):  # Achieves ~91%
         return x
 
 
-class BaselineCNN_dropout(nn.Module):
+class BaselineCNNdropout(nn.Module):
 
     def __init__(self, num_classes, p=0.5):
         '''
         Placeholder CNN
         '''
-        super(BaselineCNN_dropout, self).__init__()
+        super(BaselineCNNdropout, self).__init__()
 
         self.p = p
         self.conv1 = nn.Conv2d(3, 32, 5)
