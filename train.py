@@ -1,34 +1,30 @@
 from __future__ import print_function
-import os
-import sys
 
 import argparse
-import dateutil.tz
 import datetime
-import numpy as np
+import os
 import pprint
 import random
+import sys
 from shutil import copyfile
+
+import dateutil.tz
+import numpy as np
+import torch
+from botocore import args
+from skopt import gp_minimize
+from skopt.space import Real, Integer
+# from skopt.plots import plot_convergence
+# from skopt.plots import plot_objective, plot_evaluations
+from skopt.utils import use_named_args
 from tensorboardX import SummaryWriter
 
-import skopt
-from skopt import gp_minimize, forest_minimize
-from skopt.space import Real, Categorical, Integer
-from skopt.plots import plot_convergence
-from skopt.plots import plot_objective, plot_evaluations
-from skopt.utils import use_named_args
-
-import torch
-
+from models.baselines import ConvModel
+from models.model_initialisation import initialize_model
+from trainer.trainer import train_model
 from utils.config import cfg, cfg_from_file
 from utils.dataloader import prepare_dataloaders
 from utils.misc import mkdir_p
-from models.model_initialisation import initialize_model
-from models.baselines import ConvNet
-from trainer.trainer import train_model
-
-
-
 
 dir_path = (os.path.abspath(os.path.join(os.path.realpath(__file__), './.')))
 sys.path.append(dir_path)
@@ -289,7 +285,7 @@ if __name__ == '__main__':
         model = initialize_model(cfg.CONFIG_NAME)
         
         #Create the summaryWriter for Tensorboard
-        writer = SummaryWriter(output_dir.replace("checkpoint","logs"))
+        writer = SummaryWriter(cfg.OUTPUT_DIR.replace("checkpoint","logs"))
         
         #Train the model
         train_model(model,
