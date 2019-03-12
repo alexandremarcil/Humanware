@@ -50,10 +50,6 @@ def initialize_model(model_name):
         elif model_name == "ResNet152":
             model = ResNet152(num_classes = 7)
             model.linear = CustomHead(512*4)
-
-    elif model_name == "ConvNet":
-        model =  ConvNet(num_classes = 7)
-        model.fc = CustomHead(4608)
         
     elif model_name == "BaselineCNN":
         model =  BaselineCNN(num_classes = 7)
