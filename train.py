@@ -210,14 +210,6 @@ if __name__ == '__main__':
 
             writer = SummaryWriter(output_dir.replace("checkpoint","logs"))
 
-            batch = next(iter(train_loader))
-            inputs = batch['image']
-            inputs = inputs.to(device)
-            model = model.to(device)
-
-            writer.add_graph(model, inputs)
-
-
             # Use Keras to train the model.
             best_model, accuracy = train_model(model,
                                                train_loader = train_loader,
