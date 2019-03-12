@@ -5,7 +5,7 @@ SEED: 1234
 # Hyperparameters related to model training
 TRAIN:
   DATASET_SPLIT: 'train'
-  VALID_SPLIT: 0.80
+  VALID_SPLIT: 0.90
   SAMPLE_SIZE: -1 # Number of samples to use (for debugging purposes), set to -1 to use the entire dataset
   BATCH_SIZE: 32
   NUM_EPOCHS: 50
