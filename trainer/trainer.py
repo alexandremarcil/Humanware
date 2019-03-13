@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import copy
+import os
 import time
 
 import torch
@@ -9,9 +10,9 @@ from tqdm import tqdm
 from utils.config import cfg
 
 
-def train_model(model, train_loader, valid_loader, device,
-                num_epochs=cfg.TRAIN.NUM_EPOCHS, lr=cfg.TRAIN.LR,
-                output_dir=None):
+def train_model(model, train_loader, valid_loader, device, writer,
+                num_epochs=cfg.TRAIN.NUM_EPOCHS, lr=cfg.TRAIN.LR, weight_decay=0,
+                output_dir=None, checkpoint_every=10, load_model_path=None):
     '''
     Training loop.
 
@@ -25,138 +26,166 @@ def train_model(model, train_loader, valid_loader, device,
         The validation data loader.
     device : str
         The type of device to use ('cpu' or 'gpu').
-    num_eopchs : int
+    writer : obj
+        tensorboardX SummaryWriter
+    num_epochs : int
         Number of epochs to train the model.
     lr : float
         Learning rate for the optimizer.
+    weight_decay : float
+        L2 regularization
     output_dir : str
         path to the directory where to save the model.
+    checkpoint_every : int
+        number of epochs between each checkpoint
+    load_model_path : str
+        path of checkpoint to load (if any)
 
     '''
 
     since = time.time()
     model = model.to(device)
-    train_loss_history = []
-    valid_loss_history = []
-    valid_accuracy_history = []
+    best_model = copy.deepcopy(model)
     valid_best_accuracy = 0
-    optimizer = torch.optim.SGD(model.parameters(), lr=cfg.TRAIN.LR, momentum=cfg.TRAIN.MOM)
+    starting_epoch = 1
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
     criterion = torch.nn.CrossEntropyLoss(ignore_index=-1)
 
-    print("# Start training #")
-    for epoch in range(num_epochs):
+    if load_model_path:
+        print("# Loading Model #")
+        checkpoint = torch.load(load_model_path)
+        model.load_state_dict(checkpoint['model_state_dict'])
+        best_model.load_state_dict(checkpoint['best_model'])
+        optimizer.load_state_dict(checkpoint['optim_dict'])
+        starting_epoch = checkpoint['epoch']
+        valid_best_accuracy = checkpoint['valid_best_accuracy']
+        writer = load_model_path.replace("results/", "results/logs/")
 
-        train_loss = 0
-        train_n_iter = 0
+    loader = {"train": train_loader, "valid": valid_loader}
 
-        # Set model to train mode
-        model = model.train()
+    for epoch in range(starting_epoch, num_epochs + 1):
 
-        # Iterate over train data
-        print("\n\n\nIterating over training data...")
-        for i, batch in enumerate(tqdm(train_loader)):
-            # get the inputs
-            inputs, targets = batch['image'], batch['target']
+        print('\nEpoch: {}/{}'.format(epoch, num_epochs))
 
-            inputs = inputs.to(device)
-            target_ndigits = targets[:, 0].long()
-            target_digits = targets[:, 1:].long()
+        for phase in ["train", "valid"]:
 
-            target_ndigits = target_ndigits.to(device)
-            target_digits = target_digits.to(device)
+            loss = 0
+            n_iter = 0
+            correct_ndigits = 0
+            correct_sequence = 0
+            correct_digits = [0 for _ in range(5)]
+            ndigits_samples = 0
+            digits_samples = [0 for _ in range(5)]
+            digits_acc = {}
 
-            # Zero the gradient buffer
-            optimizer.zero_grad()
+            if phase == "train":
+                print("# Start training #")
+                model.train()
+            else:
+                print("Iterating over validation data...")
+                model.eval()
 
-            # Forward
-            outputs_ndigits, outputs_digits = model(inputs)
-            
-            #Loss for the lenght of the sequence
-            loss = criterion(outputs_ndigits, target_ndigits)
-            
-            #Loss for the digits prediction
-            for idx, output_digit in enumerate(outputs_digits):
-                loss +=  criterion(output_digit,target_digits[:,idx])
+            # train_loss = 0
+            # train_n_iter = 0
 
-            # Backward
-            loss.backward()
+            # Iterate over train/valid data
+            print("\nIterating over " + phase + " data...")
+            for i, batch in enumerate(tqdm(loader[phase])):
+                # get the inputs
+                inputs, targets = batch['image'], batch['target']
 
-            # Optimize
-            optimizer.step()
+                inputs = inputs.to(device)
+                target_ndigits = targets[:, 0].long()
+                target_digits = targets[:, 1:].long()
 
-            # Statistics
-            train_loss += loss.item()
-            train_n_iter += 1
+                target_ndigits = target_ndigits.to(device)
+                target_digits = target_digits.to(device)
 
-        valid_loss = 0
-        valid_n_iter = 0
-        valid_correct_ndigits = 0
-        valid_correct_digits = [0 for _ in range(5)]
-        valid_ndigits_samples = 0
-        valid_digits_samples = [0 for _ in range(5)]
-        valid_digits_acc = {} 
+                # Zero the gradient buffer
+                optimizer.zero_grad()
 
-        # Set model to evaluate mode
-        model = model.eval()
+                with torch.set_grad_enabled(phase == "train"):
+                    # Forward
+                    outputs_ndigits, outputs_digits = model(inputs)
 
-        # Iterate over valid data
-        print("Iterating over validation data...")
-        for i, batch in enumerate(tqdm(valid_loader)):
-            # get the inputs
-            inputs, targets = batch['image'], batch['target']
+                    # Loss for the length of the sequence
+                    loss = criterion(outputs_ndigits, target_ndigits)
 
-            inputs = inputs.to(device)
+                    # Loss for the digits prediction
+                    for idx, output_digit in enumerate(outputs_digits):
+                        loss += criterion(output_digit, target_digits[:, idx])
 
-            target_ndigits = targets[:, 0].long()
-            target_digits = targets[:, 1:].long()
-            
-            
-            target_ndigits = target_ndigits.to(device)
-            target_digits = target_digits.to(device)
+                if phase == "train":
+                    # Backward
+                    loss.backward()
 
-            # Forward
-            outputs_ndigits, outputs_digits = model(inputs)
+                    # Optimize
+                    optimizer.step()
 
-            
-            loss = criterion(outputs_ndigits, target_ndigits)
-            
-            #Loss for the digits prediction
-            for digits, output_digit in enumerate(outputs_digits):
-                loss +=  criterion(output_digit,target_digits[:,digits])
+                # Statistics
+                loss += loss.item()
+                n_iter += 1
 
-            # Statistics
-            valid_loss += loss.item()
-            valid_n_iter += 1
-            _, predicted_ndigits = torch.max(outputs_ndigits.data, 1)
-            predicted_digits = [torch.max(output_digit.data, 1)[1] for output_digit in outputs_digits]
-            
-            valid_correct_ndigits += (predicted_ndigits == target_ndigits).sum().item()
-            valid_ndigits_samples += target_ndigits.size(0)
-            
+                predicted_ndigits = torch.max(outputs_ndigits, 1)[1]
+
+                predicted_digits = torch.cat(
+                    [torch.max(output_digit.data, dim=1)[1].unsqueeze(1) for output_digit in outputs_digits],
+                    dim=1)
+
+                good_digits = predicted_digits == target_digits
+                good_ndigit = predicted_ndigits == target_ndigits
+
+                all_good_digits = torch.prod(((target_digits == -1) + (target_digits != -1) * good_digits),
+                                             dim=1, dtype=torch.uint8)
+
+                good_sequence = all_good_digits * good_ndigit
+
+                correct_ndigits += good_ndigit.sum().item()
+                ndigits_samples += target_ndigits.size(0)
+                correct_sequence += good_sequence.sum().item()
+
+                for digits in range(5):
+                    correct_digits[digits] += (good_digits[:, digits]).sum().item()
+                    digits_samples[digits] += (target_digits[:, digits] != -1).sum().item()
+
+            sequence_acc = correct_sequence / ndigits_samples
+            ndigits_acc = correct_ndigits / ndigits_samples
+
             for digits in range(5):
-                valid_correct_digits[digits] += (predicted_digits[digits] == target_digits[:,digits]).sum().item()
-                valid_digits_samples[digits] += (target_digits[:,digits] != -1).sum().item()
+                digits_acc[digits + 1] = correct_digits[digits] / digits_samples[digits]
 
-        train_loss_history.append(train_loss / train_n_iter)
-        valid_loss_history.append(valid_loss / valid_n_iter)
-        valid_ndigits_acc = valid_correct_ndigits / valid_ndigits_samples
-        
-        for digits in range(5):
-            valid_digits_acc[digits+1] = valid_correct_digits[digits]/valid_digits_samples[digits]
+            print('\t' + phase + ' loss: {:.4f}'.format(loss / n_iter))
+            print('\tSequence Accuracy: {:.4f}'.format(sequence_acc))
+            print('\tSequence length Accuracy: {:.4f}'.format(ndigits_acc))
+            print(f'\tDigits Accuracy: {digits_acc}')
 
-        print('\nEpoch: {}/{}'.format(epoch + 1, num_epochs))
-        print('\tTrain Loss: {:.4f}'.format(train_loss / train_n_iter))
-        print('\tValid Loss: {:.4f}'.format(valid_loss / valid_n_iter))
-        print('\tValid Sequence length Accuracy: {:.4f}'.format(valid_ndigits_acc))
-        print(f'\tValid Digits Accuracy: {valid_digits_acc}')
+            writer.add_scalar(phase + ' loss', loss / n_iter, epoch + 1)
 
-        if valid_ndigits_acc > valid_best_accuracy:
-            valid_best_accuracy = valid_ndigits_acc
-            best_model = copy.deepcopy(model)
-            print('Checkpointing new model...')
-            model_filename = output_dir + '/checkpoint.pth'
-            torch.save(model, model_filename)
-        valid_accuracy_history.append(valid_ndigits_acc)
+            writer.add_scalar(phase + ' Sequence Accuracy', sequence_acc, epoch + 1)
+
+            writer.add_scalars(phase + ' accuracy', {
+                'length': ndigits_acc,
+                'digit1': digits_acc[1],
+                'digit2': digits_acc[2],
+                'digit3': digits_acc[3],
+                'digit4': digits_acc[4],
+                'digit5': digits_acc[5]}, epoch + 1)
+
+            if phase == "valid":
+                if sequence_acc > valid_best_accuracy:
+                    valid_best_accuracy = sequence_acc
+                    best_model = copy.deepcopy(model)
+
+                if (epoch % checkpoint_every == 0) or (epoch == num_epochs):
+                    print('Checkpointing new model...')
+                    state = {'epoch': epoch + 1,
+                             'model_state_dict': model.state_dict(),
+                             "best_model": best_model.state_dict(),
+                             'optim_dict': optimizer.state_dict(),
+                             "valid_best_accuracy": valid_best_accuracy
+                             }
+                    model_filename = os.path.join(output_dir, "epoch" + str(epoch) + '_checkpoint.pth')
+                    torch.save(state, model_filename)
 
     time_elapsed = time.time() - since
 
@@ -167,3 +196,5 @@ def train_model(model, train_loader, valid_loader, device,
     model_filename = output_dir + '/best_model.pth'
     torch.save(best_model, model_filename)
     print('Best model saved to :', model_filename)
+
+    return best_model, valid_best_accuracy

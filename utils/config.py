@@ -1,11 +1,11 @@
 from __future__ import division
 from __future__ import print_function
 
-from easydict import EasyDict as edict
+from easydict import EasyDict as eDict
 import numpy as np
 
 
-__C = edict()
+__C = eDict()
 cfg = __C
 
 __C.CONFIG_NAME = 'ConNet'
@@ -13,7 +13,7 @@ __C.DATASET_NAME = 'SVHN'
 __C.SEED = 1234
 
 # Training options
-__C.TRAIN = edict()
+__C.TRAIN = eDict()
 __C.TRAIN.DATASET_SPLIT = 'train'
 __C.TRAIN.VALID_SPLIT = 0.8
 __C.TRAIN.SAMPLE_SIZE = 100
@@ -36,7 +36,7 @@ def _merge_a_into_b(a, b):
         Config dictionary b.
 
     '''
-    if type(a) is not edict:
+    if type(a) is not eDict:
         return
 
     for k, v in a.items():
@@ -57,7 +57,7 @@ def _merge_a_into_b(a, b):
                                                                    type(v), k))
 
             # recursively merge dicts
-            if type(v) is edict:
+            if type(v) is eDict:
                 try:
                     _merge_a_into_b(a[k], b[k])
                 except Exception as e:
@@ -79,6 +79,6 @@ def cfg_from_file(filename):
     '''
     import yaml
     with open(filename, 'r') as f:
-        yaml_cfg = edict(yaml.load(f))
+        yaml_cfg = eDict(yaml.load(f))
 
     _merge_a_into_b(yaml_cfg, __C)

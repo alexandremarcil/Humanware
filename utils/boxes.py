@@ -21,13 +21,13 @@ def extract_labels_boxes(meta):
 
     '''
 
-    N = len(meta['label'])  # Number of digits in image
+    n = len(meta['label'])  # Number of digits in image
 
     labels = []  # Digits present in image
     boxes = []  # bboxes present in image
 
     # Extract digit boxes and labels
-    for jj in range(N):
+    for jj in range(n):
         labels.append(int(meta['label'][jj]))
         y1 = meta['top'][jj]
         y2 = y1 + meta['height'][jj]
