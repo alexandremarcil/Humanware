@@ -59,7 +59,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
         optimizer.load_state_dict(checkpoint['optim_dict'])
         starting_epoch = checkpoint['epoch']
         valid_best_accuracy = checkpoint['valid_best_accuracy']
-        writer = load_model_path.replace("results/", "results/logs/")
+        writer = load_model_path
 
     loader = {"train": train_loader, "valid": valid_loader}
 
