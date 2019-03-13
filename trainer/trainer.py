@@ -65,16 +65,19 @@ def train_model(model, train_loader, valid_loader, device, writer,
 
     for epoch in range(starting_epoch, num_epochs + 1):
 
-        loss = 0
-        n_iter = 0
-        correct_ndigits = 0
-        correct_sequence = 0
-        correct_digits = [0 for _ in range(5)]
-        ndigits_samples = 0
-        digits_samples = [0 for _ in range(5)]
-        digits_acc = {}
+        print('\nEpoch: {}/{}'.format(epoch, num_epochs))
 
         for phase in ["train", "valid"]:
+
+            loss = 0
+            n_iter = 0
+            correct_ndigits = 0
+            correct_sequence = 0
+            correct_digits = [0 for _ in range(5)]
+            ndigits_samples = 0
+            digits_samples = [0 for _ in range(5)]
+            digits_acc = {}
+
             if phase == "train":
                 print("# Start training #")
                 model.train()
@@ -86,7 +89,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
             # train_n_iter = 0
 
             # Iterate over train/valid data
-            print("\n\n\nIterating over " + phase + "  data...")
+            print("\nIterating over " + phase + " data...")
             for i, batch in enumerate(tqdm(loader[phase])):
                 # get the inputs
                 inputs, targets = batch['image'], batch['target']
@@ -151,9 +154,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
             for digits in range(5):
                 digits_acc[digits + 1] = correct_digits[digits] / digits_samples[digits]
 
-            print(phase)
-            print('\nEpoch: {}/{}'.format(epoch, num_epochs))
-            print('\tLoss: {:.4f}'.format(loss / n_iter))
+            print('\t' + phase + ' loss: {:.4f}'.format(loss / n_iter))
             print('\tSequence Accuracy: {:.4f}'.format(sequence_acc))
             print('\tSequence length Accuracy: {:.4f}'.format(ndigits_acc))
             print(f'\tDigits Accuracy: {digits_acc}')

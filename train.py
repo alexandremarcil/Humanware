@@ -293,5 +293,5 @@ if __name__ == '__main__':
                     device=device,
                     writer=writer,
                     num_epochs=cfg.TRAIN.NUM_EPOCHS,
-                    lr=cfg.TRAIN.NUM_EPOCHS,
+                    lr=cfg.TRAIN.LR,
                     output_dir=cfg.OUTPUT_DIR)
