@@ -43,7 +43,6 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
             nn.Dropout(dropout)
         )
-
         hidden6 = nn.Sequential(
             nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
@@ -51,7 +50,6 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=1, padding=1),
             nn.Dropout(dropout)
         )
-
         hidden7 = nn.Sequential(
             nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
@@ -59,7 +57,6 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
             nn.Dropout(dropout)
         )
-
         hidden8 = nn.Sequential(
             nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
@@ -67,7 +64,6 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=1, padding=1),
             nn.Dropout(dropout)
         )
-
         hidden9 = nn.Sequential(
             nn.Linear(192 * 7 * 7, 3072),
             nn.ReLU()
@@ -110,47 +106,47 @@ class ConvModel(nn.Module):
         return x
 
 
-class BaselineCNN(nn.Module):  # Achieves ~91%
-
-    def __init__(self, num_classes):
-        '''
-        Placeholder CNN
-        '''
-        super(BaselineCNN, self).__init__()
-
-        self.conv1 = nn.Conv2d(3, 32, 5)
-        self.conv2 = nn.Conv2d(32, 64, 3)
-
-        self.pool = nn.MaxPool2d(2, 2)
-
-        self.fc1 = nn.Linear(7744, 4096)
-        self.fc2 = nn.Linear(4096, num_classes)
-
-    def forward(self, x):
-        '''
-        Forward path.
-
-        Parameters
-        ----------
-        x : ndarray
-            Input to the network.
-
-        Returns
-        -------
-        x : ndarray
-            Output to the network.
-
-        '''
-
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        # Flatten based on batch size
-        x = x.view(x.size(0), -1)
-
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)
-
-        return x
+# class BaselineCNN(nn.Module):  # Achieves ~91%
+#
+#     def __init__(self, num_classes):
+#         '''
+#         Placeholder CNN
+#         '''
+#         super(BaselineCNN, self).__init__()
+#
+#         self.conv1 = nn.Conv2d(3, 32, 5)
+#         self.conv2 = nn.Conv2d(32, 64, 3)
+#
+#         self.pool = nn.MaxPool2d(2, 2)
+#
+#         self.fc1 = nn.Linear(7744, 4096)
+#         self.fc2 = nn.Linear(4096, num_classes)
+#
+#     def forward(self, x):
+#         '''
+#         Forward path.
+#
+#         Parameters
+#         ----------
+#         x : ndarray
+#             Input to the network.
+#
+#         Returns
+#         -------
+#         x : ndarray
+#             Output to the network.
+#
+#         '''
+#
+#         x = self.pool(F.relu(self.conv1(x)))
+#         x = self.pool(F.relu(self.conv2(x)))
+#         # Flatten based on batch size
+#         x = x.view(x.size(0), -1)
+#
+#         x = F.relu(self.fc1(x))
+#         x = self.fc2(x)
+#
+#         return x
 
 
 class BaselineCNNdropout(nn.Module):

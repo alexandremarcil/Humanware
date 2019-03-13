@@ -1,4 +1,4 @@
-from models.baselines import BaselineCNN, BaselineCNNdropout
+from models.baselines import BaselineCNNdropout
 from models.customhead import CustomHead
 from models.resnet import resnet18, resnet50, resnet101, resnet152
 from models.vgg import VGG
@@ -49,11 +49,11 @@ def initialize_model(model_name):
             model = resnet152(num_classes=7)
             model.linear = CustomHead(512 * 4)
 
-    elif model_name == "BaselineCNN":
-        model = BaselineCNN(num_classes=7)
-        model.fc2 = CustomHead(4096)
+    # elif model_name == "BaselineCNN":
+    #     model = BaselineCNN(num_classes=7)
+    #     model.fc2 = CustomHead(4096)
 
-    elif model_name == "BaselineCNN_dropout":
+    elif model_name == "BaselineCNNdropout":
         model = BaselineCNNdropout(num_classes=7, p=0.5)
         model.fc2 = CustomHead(4096)
 
