@@ -294,4 +294,7 @@ if __name__ == '__main__':
                     writer=writer,
                     num_epochs=cfg.TRAIN.NUM_EPOCHS,
                     lr=cfg.TRAIN.LR,
-                    output_dir=cfg.OUTPUT_DIR)
+                    output_dir='results/ResNet50_2019_03_13_22_13_10',
+                    checkpoint_every=10,
+                    load_model_path='results/ResNet50_2019_03_13_22_13_10/epoch40_checkpoint.pth')
+
