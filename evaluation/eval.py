@@ -115,10 +115,6 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
 
     test_accuracy = test_correct / test_n_samples
 
-    print("Confusion Matrix")
-    print("===============================")
-    print(confusion_matrix(y_true, y_pred, labels=range(0, 7)))
-    print("===============================")
     print('\n\nTest Set Accuracy: {:.4f}'.format(test_accuracy))
 
     time_elapsed = time.time() - since
