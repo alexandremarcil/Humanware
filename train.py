@@ -16,7 +16,6 @@ from skopt.space import Real, Integer
 from skopt.utils import use_named_args
 from tensorboardX import SummaryWriter
 
-from models.baselines import ConvModel
 from models.model_initialisation import initialize_model
 from trainer.trainer import train_model
 from utils.config import cfg, cfg_from_file
@@ -91,7 +90,7 @@ def load_config():
     cfg.METADATA_FILENAME = args.metadata_filename
     cfg.OUTPUT_DIR = os.path.join(
         args.results_dir,
-        '%s_%s' % (cfg.DATASET_NAME, timestamp))
+        '%s_%s_%s' % (cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp))
     cfg.HYPERSEARCH = args.hypersearch
 
     mkdir_p(cfg.OUTPUT_DIR)
@@ -150,11 +149,21 @@ if __name__ == '__main__':
     if cfg.HYPERSEARCH:
 
         # Defined the prameters and search space
-        dim_learning_rate = Real(low=1e-6, high=1e-2, prior='log-uniform', name='learning_rate')
-        dim_num_dense_layers = Integer(low=0, high=2, name='num_dense_layers')
+        dim_learning_rate = Real(low=1e-6, high=1e-2,
+                                 prior='log-uniform', name='learning_rate')
+
+        dim_num_dense_layers = Integer(low=0,  high=2,
+                                       name='num_dense_layers')
+
         dim_dropout = Real(low=0, high=0.9, name='dropout')
-        dim_wd = Real(low=1e-6, high=1e-2, prior='log-uniform', name='Weight_Decay')
-        dimensions = [dim_learning_rate, dim_num_dense_layers, dim_dropout, dim_wd]
+        dim_wd = Real(low=1e-6, high=1e-2,
+                      prior='log-uniform', name='Weight_Decay')
+
+        dimensions = [dim_learning_rate,
+                      dim_num_dense_layers,
+                      dim_dropout,
+                      dim_wd]
+
         default_parameters = [0.001, 2, 0.2, 0.0005]
 
         # Path to save the best model find during the hyperparameter search
@@ -163,8 +172,8 @@ if __name__ == '__main__':
         # Initialize the best accuracy
         best_accuracy = 0.0
 
-
-        def log_dir_name(learning_rate, num_dense_layers, dropout, weight_decay):
+        def log_dir_name(learning_rate, num_dense_layers,
+                         dropout, weight_decay):
             '''
             Set the dir-name for the TensorBoard
 
@@ -188,9 +197,9 @@ if __name__ == '__main__':
 
             return log_dir
 
-
         @use_named_args(dimensions=dimensions)
-        def fitness(learning_rate, num_dense_layers, dropout, weight_decay):
+        def fitness(learning_rate, num_dense_layers,
+                    dropout, weight_decay):
             '''
             Create and run model with a specified hyperparameter setting.
             Used for the hyperparameter optimization
@@ -216,10 +225,14 @@ if __name__ == '__main__':
             print()
 
             # Create the neural network with these hyper-parameters.
-            model = ConvModel(num_dense_layers=num_dense_layers, dropout=dropout)
+            model = initialize_model(cfg.CONFIG_NAME)
 
             # Dir-name for the TensorBoard log-files.
-            log_dir = log_dir_name(learning_rate, num_dense_layers, dropout, weight_decay)
+            log_dir = log_dir_name(learning_rate,
+                                   num_dense_layers,
+                                   dropout,
+                                   weight_decay)
+
             output_dir = cfg.OUTPUT_DIR + "/" + log_dir
 
             # Create the directory
@@ -264,7 +277,6 @@ if __name__ == '__main__':
             # accuracy, we need to negate this number so it can be minimized.
             return -accuracy
 
-
         # Run the hyperparameter search
         search_result = gp_minimize(func=fitness,
                                     dimensions=dimensions,
@@ -276,15 +288,22 @@ if __name__ == '__main__':
         print("Best Accuracy:")
         print(-search_result.fun)
         print("Best Parameters:")
-        dim_names = ['learning_rate', 'num_dense_layers', 'dropout', 'Weigth_Decay']
-        print({paramname: best_param for paramname, best_param in zip(dim_names, search_result.x)})
+
+        dim_names = ['learning_rate',
+                     'num_dense_layers',
+                     'dropout',
+                     'Weigth_Decay']
+
+        print({paramname: best_param
+               for paramname, best_param in
+               zip(dim_names, search_result.x)})
 
     else:
         # Define model architecture
         model = initialize_model(cfg.CONFIG_NAME)
 
         # Create the summaryWriter for Tensorboard
-        writer = SummaryWriter(cfg.OUTPUT_DIR.replace("checkpoint", "logs"))
+        writer = SummaryWriter(cfg.OUTPUT_DIR)
 
         # Train the model
         train_model(model,

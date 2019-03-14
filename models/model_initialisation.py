@@ -1,12 +1,13 @@
-from models.baselines import BaselineCNN, BaselineCNNdropout
+from models.baselines import ConvModel, BaselineCNNdropout
 from models.customhead import CustomHead
 from models.resnet import resnet18, resnet50, resnet101, resnet152
 from models.vgg import VGG
 
 
-def initialize_model(model_name):
+def initialize_model(model_name, num_dense_layers=2, dropout=0):
     '''
-    Initialise a model with a custom head to predict both sequence length and digits
+    Initialise a model with a custom head
+    to predict both sequence length and digits
 
     Parameters
     ----------
@@ -14,13 +15,13 @@ def initialize_model(model_name):
         Model Name can be either:
         ResNet
         VGG
-        BaselineCNN
+        ConvNet
         BaselineCNN_dropout
-        
+
     Returns
     -------
     model : object
-        The model to be initialize 
+        The model to be initialize
 
     '''
 
@@ -49,12 +50,11 @@ def initialize_model(model_name):
             model = resnet152(num_classes=7)
             model.linear = CustomHead(512 * 4)
 
-    elif model_name == "BaselineCNN":
-        model = BaselineCNN(num_classes=7)
-        model.fc2 = CustomHead(4096)
+    elif model_name == "ConvNet":
+        model = ConvModel(num_dense_layers=num_dense_layers, dropout=dropout)
 
     elif model_name == "BaselineCNN_dropout":
-        model = BaselineCNNdropout(num_classes=7, p=0.5)
+        model = BaselineCNNdropout(num_classes=7, p=dropout)
         model.fc2 = CustomHead(4096)
 
     return model

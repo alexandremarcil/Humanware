@@ -9,12 +9,11 @@ import time
 from tqdm import tqdm
 import random
 from sklearn.metrics import confusion_matrix
+from utils.dataloader import prepare_dataloaders
 
 import sys
 
 sys.path.append('..')
-
-from utils.dataloader import prepare_dataloaders
 
 
 def eval_model(dataset_dir, metadata_filename, model_filename,
@@ -77,26 +76,44 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
     y_true = []
     y_pred = []
     for i, batch in enumerate(tqdm(test_loader)):
+
         # get the inputs
         inputs, targets = batch['image'], batch['target']
 
         inputs = inputs.to(device)
 
         target_ndigits = targets[:, 0].long()
-        target_ndigits = target_ndigits.to(device)
+        target_digits = targets[:, 1:].long()
+
+        target = torch.cat([target_digits[:, digit_rank].unsqueeze(1) * 10**(4 - digit_rank)
+                            for digit_rank in range(5)], dim=1).sum(1)
+
+        adjtargfor_length = torch.pow(torch.full_like(target_ndigits, 10), 5 - target_ndigits)
+
+        target = target/adjtargfor_length
 
         # Forward
-        outputs = model(inputs)
+        outputs_ndigits, outputs_digits = model(inputs)
+
+        outputs_ndigits = outputs_ndigits.cpu()
+        outputs_digits = outputs_digits.cpu()
 
         # Statistics
-        _, predicted = torch.max(outputs.data, 1)
+        predicted_ndigits = torch.max(outputs_ndigits, 1)[1]
+        predicted_digits = torch.cat([torch.max(output_digit.data, dim=1)[1].unsqueeze(1) * 10**(4 - digit_rank)
+                                      for digit_rank, output_digit in enumerate(outputs_digits)], dim=1).sum(1)
+
+        adj_for_length = torch.pow(torch.full_like(predicted_ndigits, 10), 5 - predicted_ndigits)
+
+        predicted = predicted_digits/adj_for_length
 
         y_pred.extend(list(predicted.cpu().numpy()))
-        y_true.extend(list(target_ndigits.cpu().numpy()))
+        y_true.extend(list(target.cpu().numpy()))
 
-        test_correct += (predicted == target_ndigits).sum().item()
+        test_correct += (predicted == target).sum().item()
         test_n_samples += target_ndigits.size(0)
-        test_accuracy = test_correct / test_n_samples
+
+    test_accuracy = test_correct / test_n_samples
 
     print("Confusion Matrix")
     print("===============================")
@@ -116,12 +133,12 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
 
 
 if __name__ == "__main__":
-    ###### DO NOT MODIFY THIS SECTION ######
+    # DO NOT MODIFY THIS SECTION
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--metadata_filename", type=str, default='')
-    # metadata_filename will be the absolute path to the directory to be used for
-    # evaluation.
+    # metadata_filename will be the absolute path to the directory
+    #  to be used for evaluation.
 
     parser.add_argument("--dataset_dir", type=str, default='')
     # dataset_dir will be the absolute path to the directory to be used for
@@ -137,18 +154,18 @@ if __name__ == "__main__":
     results_dir = args.results_dir
     #########################################
 
-    ###### MODIFY THIS SECTION ######
+    # MODIFY THIS SECTION ######
     # Put your group name here
-    group_name = "b1phut_baseline"
+    group_name = "b2phut5"
 
-    model_filename = '/rap/jvb-000-aa/COURS2019/etudiants/submissions/b1phut_baseline/model/vgg19_momentum.pth'
+    model_filename = '/rap/jvb-000-aa/COURS2019/etudiants/submissions/b2phut5/model/best_model.pth'
     # model_filename should be the absolute path on shared disk to your
     # best model. You need to ensure that they are available to evaluators on
     # Helios.
 
     #################################
 
-    ###### DO NOT MODIFY THIS SECTION ######
+    # DO NOT MODIFY THIS SECTION #
     print("\nEvaluating results ... ")
     y_pred = eval_model(dataset_dir, metadata_filename, model_filename)
 
