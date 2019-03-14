@@ -8,6 +8,7 @@ import torch
 from tqdm import tqdm
 
 from utils.config import cfg
+from tensorboardX import SummaryWriter
 
 
 def train_model(model, train_loader, valid_loader, device, writer,
@@ -59,7 +60,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
         optimizer.load_state_dict(checkpoint['optim_dict'])
         starting_epoch = checkpoint['epoch']
         valid_best_accuracy = checkpoint['valid_best_accuracy']
-        writer = load_model_path.replace("results/", "results/logs/")
+        writer = SummaryWriter(output_dir)
 
     loader = {"train": train_loader, "valid": valid_loader}
 

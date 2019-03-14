@@ -1,0 +1,995 @@
+Train files already present
+timestamp: 2019_03_13_20_11_49
+Data dir: /rap/jvb-000-aa/COURS2019/etudiants/data/humanware/SVHN/train
+Output dir: /home/user6/Humanware/results/BaselineCNN_2019_03_13_20_11_49
+Using config:
+{'CONFIG_NAME': 'BaselineCNN',
+ 'DATASET_NAME': 'SVHN',
+ 'HYPERSEARCH': False,
+ 'INPUT_DIR': '/rap/jvb-000-aa/COURS2019/etudiants/data/humanware/SVHN/train',
+ 'METADATA_FILENAME': '/rap/jvb-000-aa/COURS2019/etudiants/data/humanware/SVHN/train_metadata.pkl',
+ 'OUTPUT_DIR': '/home/user6/Humanware/results/BaselineCNN_2019_03_13_20_11_49',
+ 'SEED': 1234,
+ 'TIMESTAMP': '2019_03_13_20_11_49',
+ 'TRAIN': {'BATCH_SIZE': 32,
+           'DATASET_SPLIT': 'train',
+           'LR': 0.001,
+           'MOM': 0.9,
+           'NUM_EPOCHS': 60,
+           'SAMPLE_SIZE': -1,
+           'VALID_SPLIT': 0.9}}
+pytorch/random seed: 1234
+Device used:  cuda:0
+
+Epoch: 1/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0157
+	Sequence Accuracy: 0.0128
+	Sequence length Accuracy: 0.5388
+	Digits Accuracy: {1: 0.2704078238307498, 2: 0.11468702049809183, 3: 0.12584959438719578, 4: 0.12616099071207432, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1835
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 2/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0208
+	Sequence Accuracy: 0.0134
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11826730141244049, 3: 0.12058759044069282, 4: 0.14241486068111456, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1885
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 3/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0207
+	Sequence Accuracy: 0.0146
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11854270763662116, 3: 0.12420521815391361, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1489
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 4/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0218
+	Sequence Accuracy: 0.0144
+	Sequence length Accuracy: 0.5419
+	Digits Accuracy: {1: 0.27659503692369103, 2: 0.11736239524727544, 3: 0.12453409340057005, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1453
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 5/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0217
+	Sequence Accuracy: 0.0139
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11488373922964945, 3: 0.12398596798947599, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1810
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 6/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0171
+	Sequence Accuracy: 0.0140
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11759845772514459, 3: 0.12650734488050866, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1451
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 7/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0157
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11803123893457135, 3: 0.12683622012716508, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1923
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 8/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0217
+	Sequence Accuracy: 0.0138
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11948695754809772, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1809
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 9/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0220
+	Sequence Accuracy: 0.0130
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11834598890506354, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.2222222222222222}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1980
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 10/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0166
+	Sequence Accuracy: 0.0136
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11633945784317583, 3: 0.12573996930497697, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1893
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+Checkpointing new model...
+
+Epoch: 11/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0212
+	Sequence Accuracy: 0.0137
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11905417633867096, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1460
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 12/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0163
+	Sequence Accuracy: 0.0144
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11940827005547468, 3: 0.12617846963385224, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1445
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 13/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0219
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11633945784317583, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1391
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 14/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0157
+	Sequence Accuracy: 0.0140
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11976236377227839, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.2222222222222222}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1980
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 15/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0225
+	Sequence Accuracy: 0.0133
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11748042648621002, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1453
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 16/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0208
+	Sequence Accuracy: 0.0144
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.1187787701144903, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1858
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 17/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0161
+	Sequence Accuracy: 0.0144
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11921155132391706, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1950
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 18/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0218
+	Sequence Accuracy: 0.0128
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11732305150096392, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1950
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 19/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0163
+	Sequence Accuracy: 0.0136
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.1163001140968643, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1436
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 20/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0209
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5418
+	Digits Accuracy: {1: 0.2764287139910851, 2: 0.11850336389030963, 3: 0.12628809471607103, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1958
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+Checkpointing new model...
+
+Epoch: 21/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0216
+	Sequence Accuracy: 0.0136
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11999842625014753, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.2222222222222222}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1511
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 22/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0216
+	Sequence Accuracy: 0.0136
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11787386394932525, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1961
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 23/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0222
+	Sequence Accuracy: 0.0124
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11814927017350592, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1915
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 24/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0152
+	Sequence Accuracy: 0.0134
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.1187787701144903, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.2222222222222222}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1945
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 25/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0216
+	Sequence Accuracy: 0.0141
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11748042648621002, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.2222222222222222}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1414
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 26/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0214
+	Sequence Accuracy: 0.0144
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11818861391981744, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1485
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 27/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0225
+	Sequence Accuracy: 0.0137
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11885745760711335, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1447
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 28/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0198
+	Sequence Accuracy: 0.0134
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11873942636817877, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.2222222222222222}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1954
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 29/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0163
+	Sequence Accuracy: 0.0140
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.1177951764567022, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1901
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 30/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0207
+	Sequence Accuracy: 0.0141
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.12094267616162412, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1431
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+Checkpointing new model...
+
+Epoch: 31/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0164
+	Sequence Accuracy: 0.0135
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.1164574890821104, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1544
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 32/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0164
+	Sequence Accuracy: 0.0137
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11822795766612897, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1408
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 33/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0204
+	Sequence Accuracy: 0.0140
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11834598890506354, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1987
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 34/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0216
+	Sequence Accuracy: 0.0141
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.1186213951292442, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1467
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 35/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0215
+	Sequence Accuracy: 0.0145
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11956564504072077, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1392
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 36/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0216
+	Sequence Accuracy: 0.0135
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11885745760711335, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1553
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 37/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0168
+	Sequence Accuracy: 0.0137
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11755911397883306, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1933
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 38/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0220
+	Sequence Accuracy: 0.0134
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.1181099264271944, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.2025
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 39/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0208
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11527717669276469, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1445
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 40/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0220
+	Sequence Accuracy: 0.0133
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11858205138293268, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1881
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+Checkpointing new model...
+
+Epoch: 41/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0220
+	Sequence Accuracy: 0.0130
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11720502026202935, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1428
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 42/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0160
+	Sequence Accuracy: 0.0138
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11677223905260259, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1887
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 43/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0166
+	Sequence Accuracy: 0.0140
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11818861391981744, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1480
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 44/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0162
+	Sequence Accuracy: 0.0137
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11724436400834087, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1469
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 45/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0152
+	Sequence Accuracy: 0.0136
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11803123893457135, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1455
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 46/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0153
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11822795766612897, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1920
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 47/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0163
+	Sequence Accuracy: 0.0140
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11984105126490144, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1458
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 48/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0220
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11673289530629107, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1461
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 49/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0213
+	Sequence Accuracy: 0.0134
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11854270763662116, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.2222222222222222}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1443
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 50/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0222
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.1177951764567022, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1876
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+Checkpointing new model...
+
+Epoch: 51/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0166
+	Sequence Accuracy: 0.0152
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11586733288743754, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1538
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 52/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0206
+	Sequence Accuracy: 0.0135
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11814927017350592, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1418
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 53/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0172
+	Sequence Accuracy: 0.0133
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.1171263327694063, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1988
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 54/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0221
+	Sequence Accuracy: 0.0135
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11751977023252154, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.2222222222222222}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1907
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 55/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0217
+	Sequence Accuracy: 0.0134
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11755911397883306, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1418
+	Sequence Accuracy: 0.0132
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1190308988764045, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 56/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0158
+	Sequence Accuracy: 0.0142
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11822795766612897, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1486
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 57/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0166
+	Sequence Accuracy: 0.0142
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11921155132391706, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1554
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 58/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0165
+	Sequence Accuracy: 0.0124
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11681158279891411, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.0}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1422
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 59/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0165
+	Sequence Accuracy: 0.0135
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11964433253334382, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.2222222222222222}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1902
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+
+Epoch: 60/60
+# Start training #
+
+Iterating over train data...
+	train loss: 0.0161
+	Sequence Accuracy: 0.0124
+	Sequence length Accuracy: 0.5420
+	Digits Accuracy: {1: 0.2766615660967334, 2: 0.11759845772514459, 3: 0.1269458452093839, 4: 0.14783281733746131, 5: 0.1111111111111111}
+Iterating over validation data...
+
+Iterating over valid data...
+	valid loss: 0.1467
+	Sequence Accuracy: 0.0129
+	Sequence length Accuracy: 0.5494
+	Digits Accuracy: {1: 0.2772455089820359, 2: 0.1113061797752809, 3: 0.12043435340572557, 4: 0.17105263157894737, 5: 0.0}
+Checkpointing new model...
+
+
+Training complete in 86m 51s
+Saving model ...
+Best model saved to : /home/user6/Humanware/results/BaselineCNN_2019_03_13_20_11_49/best_model.pth
+Set compute mode to DEFAULT for GPU 00000000:14:00.0.
+All done.

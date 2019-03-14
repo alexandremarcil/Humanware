@@ -53,7 +53,7 @@ def initialize_model(model_name):
         model = BaselineCNN(num_classes=7)
         model.fc2 = CustomHead(4096)
 
-    elif model_name == "BaselineCNN_dropout":
+    elif model_name == "BaselineCNNdropout":
         model = BaselineCNNdropout(num_classes=7, p=0.5)
         model.fc2 = CustomHead(4096)
 

@@ -43,7 +43,6 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
             nn.Dropout(dropout)
         )
-
         hidden6 = nn.Sequential(
             nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
@@ -51,7 +50,6 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=1, padding=1),
             nn.Dropout(dropout)
         )
-
         hidden7 = nn.Sequential(
             nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
@@ -59,7 +57,6 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
             nn.Dropout(dropout)
         )
-
         hidden8 = nn.Sequential(
             nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
@@ -67,7 +64,6 @@ class ConvModel(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=1, padding=1),
             nn.Dropout(dropout)
         )
-
         hidden9 = nn.Sequential(
             nn.Linear(192 * 7 * 7, 3072),
             nn.ReLU()
@@ -110,7 +106,7 @@ class ConvModel(nn.Module):
         return x
 
 
-class BaselineCNN(nn.Module):  # Achieves ~91%
+class BaselineCNN(nn.Module):
 
     def __init__(self, num_classes):
         '''
