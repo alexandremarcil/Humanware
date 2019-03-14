@@ -12,7 +12,7 @@ from tensorboardX import SummaryWriter
 
 
 def train_model(model, train_loader, valid_loader, device, writer,
-                num_epochs=cfg.TRAIN.NUM_EPOCHS, lr=cfg.TRAIN.LR, weight_decay=0,
+                num_epochs=cfg.TRAIN.NUM_EPOCHS, lr=0.0001, weight_decay=0,
                 output_dir=None, checkpoint_every=10, load_model_path=None):
     '''
     Training loop.
@@ -49,7 +49,9 @@ def train_model(model, train_loader, valid_loader, device, writer,
     best_model = copy.deepcopy(model)
     valid_best_accuracy = 0
     starting_epoch = 1
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    optimizer = torch.optim.Adam(model.parameters(),
+                                 lr=lr,
+                                 weight_decay=weight_decay)
     criterion = torch.nn.CrossEntropyLoss(ignore_index=-1)
 
     if load_model_path:
@@ -60,7 +62,6 @@ def train_model(model, train_loader, valid_loader, device, writer,
         optimizer.load_state_dict(checkpoint['optim_dict'])
         starting_epoch = checkpoint['epoch']
         valid_best_accuracy = checkpoint['valid_best_accuracy']
-        writer = SummaryWriter(output_dir)
 
     loader = {"train": train_loader, "valid": valid_loader}
 
@@ -74,9 +75,9 @@ def train_model(model, train_loader, valid_loader, device, writer,
             n_iter = 0
             correct_ndigits = 0
             correct_sequence = 0
-            correct_digits = [0 for _ in range(5)]
-            ndigits_samples = 0
-            digits_samples = [0 for _ in range(5)]
+            nbgooddig = [0 for _ in range(5)]
+            nblength = 0
+            nbdig = [0 for _ in range(5)]
             digits_acc = {}
 
             if phase == "train":
@@ -85,9 +86,6 @@ def train_model(model, train_loader, valid_loader, device, writer,
             else:
                 print("Iterating over validation data...")
                 model.eval()
-
-            # train_loss = 0
-            # train_n_iter = 0
 
             # Iterate over train/valid data
             print("\nIterating over " + phase + " data...")
@@ -130,30 +128,33 @@ def train_model(model, train_loader, valid_loader, device, writer,
                 predicted_ndigits = torch.max(outputs_ndigits, 1)[1]
 
                 predicted_digits = torch.cat(
-                    [torch.max(output_digit.data, dim=1)[1].unsqueeze(1) for output_digit in outputs_digits],
+                    [torch.max(output_digit.data, dim=1)[1].unsqueeze(1)
+                     for output_digit in outputs_digits],
                     dim=1)
 
                 good_digits = predicted_digits == target_digits
                 good_ndigit = predicted_ndigits == target_ndigits
 
-                all_good_digits = torch.prod(((target_digits == -1) + (target_digits != -1) * good_digits),
+                all_good_digits = torch.prod(((target_digits == -1)
+                                              + (target_digits != -1)
+                                              * good_digits),
                                              dim=1, dtype=torch.uint8)
 
                 good_sequence = all_good_digits * good_ndigit
 
                 correct_ndigits += good_ndigit.sum().item()
-                ndigits_samples += target_ndigits.size(0)
+                nblength += target_ndigits.size(0)
                 correct_sequence += good_sequence.sum().item()
 
                 for digits in range(5):
-                    correct_digits[digits] += (good_digits[:, digits]).sum().item()
-                    digits_samples[digits] += (target_digits[:, digits] != -1).sum().item()
+                    nbgooddig[digits] += (good_digits[:, digits]).sum().item()
+                    nbdig[digits] += (target_digits[:, digits] != -1).sum().item()
 
-            sequence_acc = correct_sequence / ndigits_samples
-            ndigits_acc = correct_ndigits / ndigits_samples
+            sequence_acc = correct_sequence / nblength
+            ndigits_acc = correct_ndigits / nblength
 
             for digits in range(5):
-                digits_acc[digits + 1] = correct_digits[digits] / digits_samples[digits]
+                digits_acc[digits + 1] = nbgooddig[digits] / nbdig[digits]
 
             print('\t' + phase + ' loss: {:.4f}'.format(loss / n_iter))
             print('\tSequence Accuracy: {:.4f}'.format(sequence_acc))
