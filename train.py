@@ -90,7 +90,7 @@ def load_config():
     cfg.METADATA_FILENAME = args.metadata_filename
     cfg.OUTPUT_DIR = os.path.join(
         args.results_dir,
-        '%s_%s_%s' % (cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp))
+        '%s_%s' % (cfg.CONFIG_NAME, timestamp))
     cfg.HYPERSEARCH = args.hypersearch
 
     mkdir_p(cfg.OUTPUT_DIR)
@@ -239,7 +239,7 @@ if __name__ == '__main__':
             mkdir_p(output_dir)
 
             # Create the summaryWriter for Tensorboard
-            writer = SummaryWriter(output_dir.replace("checkpoint", "logs"))
+            writer = SummaryWriter(output_dir)
 
             # Train the model.
             best_model, accuracy = train_model(model,
@@ -288,15 +288,8 @@ if __name__ == '__main__':
         print("Best Accuracy:")
         print(-search_result.fun)
         print("Best Parameters:")
-
-        dim_names = ['learning_rate',
-                     'num_dense_layers',
-                     'dropout',
-                     'Weigth_Decay']
-
-        print({paramname: best_param
-               for paramname, best_param in
-               zip(dim_names, search_result.x)})
+        dim_names = ['learning_rate', 'num_dense_layers', 'dropout', 'weight_decay']
+        print({paramname: best_param for paramname, best_param in zip(dim_names, search_result.x)})
 
     else:
         # Define model architecture
@@ -313,4 +306,7 @@ if __name__ == '__main__':
                     writer=writer,
                     num_epochs=cfg.TRAIN.NUM_EPOCHS,
                     lr=cfg.TRAIN.LR,
-                    output_dir=cfg.OUTPUT_DIR)
+                    output_dir='results/ResNet50_2019_03_13_22_13_10',
+                    checkpoint_every=10,
+                    load_model_path='results/ResNet50_2019_03_13_22_13_10/epoch40_checkpoint.pth')
+

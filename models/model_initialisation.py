@@ -53,7 +53,7 @@ def initialize_model(model_name, num_dense_layers=2, dropout=0):
     elif model_name == "ConvNet":
         model = ConvModel(num_dense_layers=num_dense_layers, dropout=dropout)
 
-    elif model_name == "BaselineCNN_dropout":
+    elif model_name == "BaselineCNNdropout":
         model = BaselineCNNdropout(num_classes=7, p=dropout)
         model.fc2 = CustomHead(4096)
 

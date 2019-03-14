@@ -8,6 +8,7 @@ import torch
 from tqdm import tqdm
 
 from utils.config import cfg
+from tensorboardX import SummaryWriter
 
 
 def train_model(model, train_loader, valid_loader, device, writer,
