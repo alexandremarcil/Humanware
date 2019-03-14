@@ -1,4 +1,4 @@
-from models.baselines import BaselineCNNdropout
+from models.baselines import BaselineCNN, BaselineCNNdropout
 from models.customhead import CustomHead
 from models.resnet import resnet18, resnet50, resnet101, resnet152
 from models.vgg import VGG
