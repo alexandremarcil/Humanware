@@ -49,9 +49,9 @@ def initialize_model(model_name):
             model = resnet152(num_classes=7)
             model.linear = CustomHead(512 * 4)
 
-    # elif model_name == "BaselineCNN":
-    #     model = BaselineCNN(num_classes=7)
-    #     model.fc2 = CustomHead(4096)
+    elif model_name == "BaselineCNN":
+        model = BaselineCNN(num_classes=7)
+        model.fc2 = CustomHead(4096)
 
     elif model_name == "BaselineCNNdropout":
         model = BaselineCNNdropout(num_classes=7, p=0.5)
