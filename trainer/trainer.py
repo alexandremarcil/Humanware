@@ -128,9 +128,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
                 # Make the prediction
                 predicted_ndigits = torch.max(outputs_ndigits, 1)[1]
 
-                predicted_digits = torch.cat(
-                   [torch.max(output_digit.data, dim=1)[1].unsqueeze(1)
-                    for output_digit in outputs_digits], dim=1)
+                predicted_digits = torch.cat([torch.max(output_digit.data, dim=1)[1].unsqueeze(1) for output_digit in outputs_digits], dim=1)
 
                 # Calculate the accuracy
                 good_digits = predicted_digits == target_digits
