@@ -8,9 +8,9 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from utils.dataloader import prepare_dataloaders
-
 sys.path.append('..')
+
+from utils.dataloader import prepare_dataloaders
 
 
 def eval_model(dataset_dir, metadata_filename, model_filename,
