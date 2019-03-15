@@ -52,7 +52,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
                                  lr=lr,
                                  weight_decay=weight_decay)
     criterion = torch.nn.CrossEntropyLoss(ignore_index=-1)
-    
+
     # Load the Model starting from a checkpoint
     if load_model_path:
         print("# Loading Model #")
@@ -137,7 +137,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
                 good_ndigit = predicted_ndigits == target_ndigits
 
                 # Verify that for each digits of a sequence
-                # the digit is not in the image (-1) 
+                # the digit is not in the image (-1)
                 # or the digit is in the image (!= -1) and it is predict correctly.
                 # Check if this is true for all digits in the sequence (torch.prod dim=1).
                 all_good_digits = torch.prod(((target_digits == -1)
@@ -153,7 +153,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
                 for digits in range(5):
                     nbgooddig[digits] += (good_digits[:, digits]).sum().item()
                     nbdig[digits] += (target_digits[:, digits] != -1).sum().item()
-                    
+
             for digits in range(5):
                 digits_acc[digits + 1] = nbgooddig[digits] / nbdig[digits]
 
@@ -164,7 +164,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
             print('\tSequence Accuracy: {:.4f}'.format(sequence_acc))
             print('\tSequence length Accuracy: {:.4f}'.format(ndigits_acc))
             print(f'\tDigits Accuracy: {digits_acc}')
-            
+
             # Logs information in Tensorboard
             writer.add_scalar(phase + ' loss', allepochloss / n_iter, epoch + 1)
             writer.add_scalar(phase + ' Sequence Accuracy', sequence_acc, epoch + 1)

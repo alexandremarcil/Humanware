@@ -8,9 +8,10 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from utils.dataloader import prepare_dataloaders
-
 sys.path.append('..')
+
+from models.baselines import ConvModel
+from utils.dataloader import prepare_dataloaders
 
 
 def eval_model(dataset_dir, metadata_filename, model_filename,
@@ -82,9 +83,9 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
         target_digits = targets[:, 1:].long()
 
         target = torch.cat([target_digits[:, digit_rank].unsqueeze(1) * 10**(4 - digit_rank)
-                        for digit_rank in range(5)], dim=1)
+                            for digit_rank in range(5)], dim=1)
 
-        target[target<0] = 0
+        target[target < 0] = 0
 
         target = target.sum(1)
 

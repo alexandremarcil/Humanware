@@ -93,7 +93,7 @@ def load_config():
         args.results_dir,
         '%s_%s' % (cfg.CONFIG_NAME, timestamp))
     cfg.HYPERSEARCH = args.hypersearch
-    
+
     if not args.hypersearch:
         mkdir_p(cfg.OUTPUT_DIR)
         copyfile(args.cfg, os.path.join(cfg.OUTPUT_DIR, 'config.yml'))
@@ -238,7 +238,7 @@ if __name__ == '__main__':
             # Create the directory
             output_dir = cfg.OUTPUT_DIR + "/" + log_dir
             mkdir_p(output_dir)
-            
+
             # Create the config file
             cfg.TRAIN.LR = learning_rate
             cfg.TRAIN.DROPOUT = dropout
@@ -319,4 +319,3 @@ if __name__ == '__main__':
                     output_dir='results/ResNet50_2019_03_13_22_13_10',
                     checkpoint_every=10,
                     load_model_path='results/ResNet50_2019_03_13_22_13_10/epoch40_checkpoint.pth')
-
