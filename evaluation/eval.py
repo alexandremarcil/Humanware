@@ -107,9 +107,10 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
         adj_for_length = torch.pow(torch.full_like(predicted_ndigits, 10), 5 - predicted_ndigits)
 
         predicted = predicted_digits / adj_for_length
-
-        y_pred.extend(list(predicted.cpu().numpy()))
-        y_true.extend(list(target.cpu().numpy()))
+        predicted = predicted.cpu().numpy()
+        target = target.cpu().numpy()
+        y_pred.extend(list(predicted))
+        y_true.extend(list(target))
 
         test_correct += (predicted == target).sum().item()
         test_n_samples += target_ndigits.size(0)
