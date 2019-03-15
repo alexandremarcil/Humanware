@@ -154,8 +154,7 @@ if __name__ == '__main__':
         dim_learning_rate = Real(low=1e-6, high=1e-2,
                                  prior='log-uniform', name='learning_rate')
 
-        dim_num_dense_layers = Integer(low=0,  high=2,
-                                       name='num_dense_layers')
+        dim_num_dense_layers = Integer(low=0, high=2, name='num_dense_layers')
 
         dim_dropout = Real(low=0, high=0.9, name='dropout')
         dim_wd = Real(low=1e-6, high=1e-2,
