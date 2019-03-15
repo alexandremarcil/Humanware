@@ -81,8 +81,12 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
         target_ndigits = targets[:, 0].long()
         target_digits = targets[:, 1:].long()
 
-        target = torch.cat([target_digits[:, digit_rank].unsqueeze(1) * 10 ** (4 - digit_rank)
-                            for digit_rank in range(5)], dim=1).sum(1)
+        target = torch.cat([target_digits[:, digit_rank].unsqueeze(1) * 10**(4 - digit_rank)
+                        for digit_rank in range(5)], dim=1)
+
+        target[target<0] = 0
+
+        target = target.sum(1)
 
         adjtargfor_length = torch.pow(torch.full_like(target_ndigits, 10), 5 - target_ndigits)
 
@@ -91,8 +95,8 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
         # Forward
         outputs_ndigits, outputs_digits = model(inputs)
 
-        outputs_ndigits = outputs_ndigits.cpu()
-        outputs_digits = outputs_digits.cpu()
+        outputs_ndigits = outputs_ndigits
+        outputs_digits = outputs_digits
 
         # Statistics
         predicted_ndigits = torch.max(outputs_ndigits, 1)[1]
