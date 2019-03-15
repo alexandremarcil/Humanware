@@ -3,6 +3,7 @@ from __future__ import print_function
 import argparse
 import datetime
 import os
+import yaml
 import pprint
 import random
 import sys
@@ -92,9 +93,10 @@ def load_config():
         args.results_dir,
         '%s_%s' % (cfg.CONFIG_NAME, timestamp))
     cfg.HYPERSEARCH = args.hypersearch
-
-    mkdir_p(cfg.OUTPUT_DIR)
-    copyfile(args.cfg, os.path.join(cfg.OUTPUT_DIR, 'config.yml'))
+    
+    if not args.hypersearch:
+        mkdir_p(cfg.OUTPUT_DIR)
+        copyfile(args.cfg, os.path.join(cfg.OUTPUT_DIR, 'config.yml'))
 
     print('Data dir: {}'.format(cfg.INPUT_DIR))
     print('Output dir: {}'.format(cfg.OUTPUT_DIR))
@@ -233,10 +235,18 @@ if __name__ == '__main__':
                                    dropout,
                                    weight_decay)
 
-            output_dir = cfg.OUTPUT_DIR + "/" + log_dir
-
             # Create the directory
+            output_dir = cfg.OUTPUT_DIR + "/" + log_dir
             mkdir_p(output_dir)
+            
+            # Create the config file
+            cfg.TRAIN.LR = learning_rate
+            cfg.TRAIN.DROPOUT = dropout
+            cfg.TRAIN.NUM_DENSE_LAYER = num_dense_layers
+            cfg.TRAIN.WEIGHT = weight_decay
+
+            with open(os.path.join(output_dir,'config.yml'), 'w') as outfile:
+                yaml.dump(cfg, outfile, default_flow_style=False)
 
             # Create the summaryWriter for Tensorboard
             writer = SummaryWriter(output_dir)
