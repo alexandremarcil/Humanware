@@ -82,9 +82,9 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
         target_digits = targets[:, 1:].long()
 
         target = torch.cat([target_digits[:, digit_rank].unsqueeze(1) * 10**(4 - digit_rank)
-                        for digit_rank in range(5)], dim=1)
+                            for digit_rank in range(5)], dim=1)
 
-        target[target<0] = 0
+        target[target < 0] = 0
 
         target = target.sum(1)
 
