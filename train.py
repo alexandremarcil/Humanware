@@ -3,7 +3,6 @@ from __future__ import print_function
 import argparse
 import datetime
 import os
-import yaml
 import pprint
 import random
 import sys
@@ -12,6 +11,7 @@ from shutil import copyfile
 import dateutil.tz
 import numpy as np
 import torch
+import yaml
 from skopt import gp_minimize
 from skopt.space import Real, Integer
 from skopt.utils import use_named_args
@@ -245,7 +245,7 @@ if __name__ == '__main__':
             cfg.TRAIN.NUM_DENSE_LAYER = num_dense_layers
             cfg.TRAIN.WEIGHT = weight_decay
 
-            with open(os.path.join(output_dir,'config.yml'), 'w') as outfile:
+            with open(os.path.join(output_dir, 'config.yml'), 'w') as outfile:
                 yaml.dump(cfg, outfile, default_flow_style=False)
 
             # Create the summaryWriter for Tensorboard

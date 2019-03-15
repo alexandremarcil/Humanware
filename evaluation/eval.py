@@ -1,17 +1,14 @@
 import argparse
+import random
+import sys
+import time
 from pathlib import Path
 
 import numpy as np
 import torch
-
-import time
-
 from tqdm import tqdm
-import random
-from sklearn.metrics import confusion_matrix
-from utils.dataloader import prepare_dataloaders
 
-import sys
+from utils.dataloader import prepare_dataloaders
 
 sys.path.append('..')
 
@@ -76,7 +73,6 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
     y_true = []
     y_pred = []
     for i, batch in enumerate(tqdm(test_loader)):
-
         # get the inputs
         inputs, targets = batch['image'], batch['target']
 
@@ -94,7 +90,7 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
 
         adjtargfor_length = torch.pow(torch.full_like(target_ndigits, 10), 5 - target_ndigits)
 
-        target = target/adjtargfor_length
+        target = target / adjtargfor_length
 
         # Forward
         outputs_ndigits, outputs_digits = model(inputs)
@@ -104,12 +100,12 @@ def eval_model(dataset_dir, metadata_filename, model_filename,
 
         # Statistics
         predicted_ndigits = torch.max(outputs_ndigits, 1)[1]
-        predicted_digits = torch.cat([torch.max(output_digit.data, dim=1)[1].unsqueeze(1) * 10**(4 - digit_rank)
+        predicted_digits = torch.cat([torch.max(output_digit.data, dim=1)[1].unsqueeze(1) * 10 ** (4 - digit_rank)
                                       for digit_rank, output_digit in enumerate(outputs_digits)], dim=1).sum(1)
 
         adj_for_length = torch.pow(torch.full_like(predicted_ndigits, 10), 5 - predicted_ndigits)
 
-        predicted = predicted_digits/adj_for_length
+        predicted = predicted_digits / adj_for_length
 
         y_pred.extend(list(predicted.cpu().numpy()))
         y_true.extend(list(target.cpu().numpy()))
