@@ -1,6 +1,5 @@
 import torch.nn as nn
 import torch.nn.functional as F
-from models.customhead import CustomHead
 
 
 class ConvModel(nn.Module):
@@ -9,85 +8,65 @@ class ConvModel(nn.Module):
         super(ConvModel, self).__init__()
 
         hidden1 = nn.Sequential(
-            nn.Conv2d(in_channels=3,
-                      out_channels=48,
-                      kernel_size=5,
-                      padding=2),
+            nn.Conv2d(in_channels=3, out_channels=48, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=48),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
             nn.Dropout(dropout)
         )
         hidden2 = nn.Sequential(
-            nn.Conv2d(in_channels=48,
-                      out_channels=64,
-                      kernel_size=5,
-                      padding=2),
+            nn.Conv2d(in_channels=48, out_channels=64, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=64),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=1, padding=1),
             nn.Dropout(dropout)
         )
         hidden3 = nn.Sequential(
-            nn.Conv2d(in_channels=64,
-                      out_channels=128,
-                      kernel_size=5,
-                      padding=2),
+            nn.Conv2d(in_channels=64, out_channels=128, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=128),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
             nn.Dropout(dropout)
         )
         hidden4 = nn.Sequential(
-            nn.Conv2d(in_channels=128,
-                      out_channels=160,
-                      kernel_size=5,
-                      padding=2),
+            nn.Conv2d(in_channels=128, out_channels=160, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=160),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=1, padding=1),
             nn.Dropout(dropout)
         )
         hidden5 = nn.Sequential(
-            nn.Conv2d(in_channels=160,
-                      out_channels=192,
-                      kernel_size=5,
-                      padding=2),
+            nn.Conv2d(in_channels=160, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
             nn.Dropout(dropout)
         )
+
         hidden6 = nn.Sequential(
-            nn.Conv2d(in_channels=192,
-                      out_channels=192,
-                      kernel_size=5,
-                      padding=2),
+            nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=1, padding=1),
             nn.Dropout(dropout)
         )
+
         hidden7 = nn.Sequential(
-            nn.Conv2d(in_channels=192,
-                      out_channels=192,
-                      kernel_size=5,
-                      padding=2),
+            nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
             nn.Dropout(dropout)
         )
+
         hidden8 = nn.Sequential(
-            nn.Conv2d(in_channels=192,
-                      out_channels=192,
-                      kernel_size=5,
-                      padding=2),
+            nn.Conv2d(in_channels=192, out_channels=192, kernel_size=5, padding=2),
             nn.BatchNorm2d(num_features=192),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=1, padding=1),
             nn.Dropout(dropout)
         )
+
         hidden9 = nn.Sequential(
             nn.Linear(192 * 7 * 7, 3072),
             nn.ReLU()
@@ -120,14 +99,24 @@ class ConvModel(nn.Module):
             self._classifier = nn.Sequential(hidden9, hidden10)
             input_features = 3072
 
-        self.custom_output = CustomHead(input_features)
+        self._digit_length = nn.Sequential(nn.Linear(input_features, 7))
+        self._digit1 = nn.Sequential(nn.Linear(input_features, 10))
+        self._digit2 = nn.Sequential(nn.Linear(input_features, 10))
+        self._digit3 = nn.Sequential(nn.Linear(input_features, 10))
+        self._digit4 = nn.Sequential(nn.Linear(input_features, 10))
+        self._digit5 = nn.Sequential(nn.Linear(input_features, 10))
 
     def forward(self, x):
         x = self._features(x)
         x = x.view(x.size(0), 192 * 7 * 7)
         x = self._classifier(x)
-        x = self.custom_output(x)
-        return x
+
+        length_logits, digits_logits = self._digit_length(x), [self._digit1(x),
+                                                               self._digit2(x),
+                                                               self._digit3(x),
+                                                               self._digit4(x),
+                                                               self._digit5(x)]
+        return length_logits, digits_logits
 
 
 class BaselineCNNdropout(nn.Module):

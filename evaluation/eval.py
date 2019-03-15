@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 sys.path.append('..')
 
+from models.baselines import ConvModel
 from utils.dataloader import prepare_dataloaders
 
 
