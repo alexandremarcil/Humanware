@@ -53,7 +53,8 @@ def train_model(model, train_loader, valid_loader, device, writer,
                                  lr=lr,
                                  weight_decay=weight_decay)
     criterion = torch.nn.CrossEntropyLoss(ignore_index=-1)
-
+    
+    # Load the Model starting from a checkpoint
     if load_model_path:
         print("# Loading Model #")
         checkpoint = torch.load(load_model_path)
@@ -71,7 +72,7 @@ def train_model(model, train_loader, valid_loader, device, writer,
 
         for phase in ["train", "valid"]:
 
-            loss = 0
+            allepochloss = 0
             n_iter = 0
             correct_ndigits = 0
             correct_sequence = 0
@@ -122,23 +123,28 @@ def train_model(model, train_loader, valid_loader, device, writer,
                     optimizer.step()
 
                 # Statistics
-                loss += loss.item()
+                allepochloss += loss.item()
                 n_iter += 1
 
+                # Make the prediction
                 predicted_ndigits = torch.max(outputs_ndigits, 1)[1]
 
                 predicted_digits = torch.cat(
-                    [torch.max(output_digit.data, dim=1)[1].unsqueeze(1)
+                   [torch.max(output_digit.data, dim=1)[1].unsqueeze(1)
                      for output_digit in outputs_digits],
                     dim=1)
 
+                # Calculate the accuracy
                 good_digits = predicted_digits == target_digits
                 good_ndigit = predicted_ndigits == target_ndigits
 
+                
+                # Verify that for each digits of a sequence
+                # the digit is not in the image (-1) 
+                # or the digit is in the image (!= -1) and it is predict correctly.
+                # Check if this is true for all digits in the sequence (torch.prod dim=1).
                 all_good_digits = torch.prod(((target_digits == -1)
-                                              + (target_digits != -1)
-                                              * good_digits),
-                                             dim=1, dtype=torch.uint8)
+                                              + (target_digits != -1) * good_digits),dim=1, dtype=torch.uint8)
 
                 good_sequence = all_good_digits * good_ndigit
 
@@ -146,25 +152,25 @@ def train_model(model, train_loader, valid_loader, device, writer,
                 nblength += target_ndigits.size(0)
                 correct_sequence += good_sequence.sum().item()
 
+                # Get the accurcy for each digits
                 for digits in range(5):
                     nbgooddig[digits] += (good_digits[:, digits]).sum().item()
                     nbdig[digits] += (target_digits[:, digits] != -1).sum().item()
+                    
+            for digits in range(5):
+                digits_acc[digits + 1] = nbgooddig[digits] / nbdig[digits]
 
             sequence_acc = correct_sequence / nblength
             ndigits_acc = correct_ndigits / nblength
 
-            for digits in range(5):
-                digits_acc[digits + 1] = nbgooddig[digits] / nbdig[digits]
-
-            print('\t' + phase + ' loss: {:.4f}'.format(loss / n_iter))
+            print('\t' + phase + ' loss: {:.4f}'.format(allepochloss / n_iter))
             print('\tSequence Accuracy: {:.4f}'.format(sequence_acc))
             print('\tSequence length Accuracy: {:.4f}'.format(ndigits_acc))
             print(f'\tDigits Accuracy: {digits_acc}')
-
-            writer.add_scalar(phase + ' loss', loss / n_iter, epoch + 1)
-
+            
+            # Logs information in Tensorboard
+            writer.add_scalar(phase + ' loss', allepochloss / n_iter, epoch + 1)
             writer.add_scalar(phase + ' Sequence Accuracy', sequence_acc, epoch + 1)
-
             writer.add_scalars(phase + ' accuracy', {
                 'length': ndigits_acc,
                 'digit1': digits_acc[1],
@@ -174,10 +180,12 @@ def train_model(model, train_loader, valid_loader, device, writer,
                 'digit5': digits_acc[5]}, epoch + 1)
 
             if phase == "valid":
+                #Keep a copy of the best model
                 if sequence_acc > valid_best_accuracy:
                     valid_best_accuracy = sequence_acc
                     best_model = copy.deepcopy(model)
 
+                # Checkpoint the model
                 if (epoch % checkpoint_every == 0) or (epoch == num_epochs):
                     print('Checkpointing new model...')
                     state = {'epoch': epoch + 1,
